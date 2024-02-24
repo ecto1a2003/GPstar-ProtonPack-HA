@@ -41,15 +41,20 @@ class IntegrationBlueprintApiClient:
     async def async_get_data(self) -> any:
         """Get data from the API."""
         return await self._api_wrapper(
-            method="get", url="https://jsonplaceholder.typicode.com/posts/1"
+            # method="get", url="https://jsonplaceholder.typicode.com/posts/1"
+            method="get",
+            #url="https://jsonplaceholder.typicode.com/posts/1",
+            url="http://192.168.50.10/status",
+            #headers={"Content-type": "application/json; charset=UTF-8"},
         )
 
     async def async_set_title(self, value: str) -> any:
         """Get data from the API."""
         return await self._api_wrapper(
-            method="patch",
-            url="https://jsonplaceholder.typicode.com/posts/1",
-            data={"title": value},
+            method="get",
+            #url="https://jsonplaceholder.typicode.com/posts/1",
+            url="http://192.168.50.10/status",
+            data={"mode": value},
             headers={"Content-type": "application/json; charset=UTF-8"},
         )
 

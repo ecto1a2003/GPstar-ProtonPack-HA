@@ -13,9 +13,16 @@ from .entity import IntegrationBlueprintEntity
 
 ENTITY_DESCRIPTIONS = (
     BinarySensorEntityDescription(
-        key="integration_blueprint",
-        name="Integration Blueprint Binary Sensor",
-        device_class=BinarySensorDeviceClass.CONNECTIVITY,
+        key="musicPaused",
+        name=DOMAIN+"music paused",
+        icon="mdi:music",
+        #device_class=BinarySensorDeviceClass.CONNECTIVITY,
+    ),
+    BinarySensorEntityDescription(
+        key="musicPlaying",
+        name=DOMAIN+"music playing",
+        icon="mdi:music",
+        #device_class=BinarySensorDeviceClass.CONNECTIVITY,
     ),
 )
 
@@ -38,13 +45,14 @@ class IntegrationBlueprintBinarySensor(IntegrationBlueprintEntity, BinarySensorE
     def __init__(
         self,
         coordinator: BlueprintDataUpdateCoordinator,
-        entity_description: BinarySensorEntityDescription,
+        entity_description: BinarySensorEntityDescription
     ) -> None:
         """Initialize the binary_sensor class."""
         super().__init__(coordinator)
         self.entity_description = entity_description
+        self._attr_unique_id = entity_description.name
 
     @property
     def is_on(self) -> bool:
         """Return true if the binary_sensor is on."""
-        return self.coordinator.data.get("title", "") == "foo"
+        return self.coordinator.data.get(self.entity_description.key)

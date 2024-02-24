@@ -1,12 +1,12 @@
 {
-  "domain": "integration_blueprint",
-  "name": "Integration blueprint",
+  "domain": "GPstar-ProtonPack-HA",
+  "name": "GPstar-ProtonPack-HA",
   "codeowners": [
-    "@ludeeus"
+    "@ecto1a2003"
   ],
   "config_flow": true,
   "documentation": "https://github.com/ludeeus/integration_blueprint",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/ludeeus/integration_blueprint/issues",
-  "version": "0.0.0"
+  "version": "0.0.1"
 }
