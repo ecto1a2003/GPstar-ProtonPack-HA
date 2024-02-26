@@ -1,10 +1,11 @@
 """Sensor platform for integration_blueprint."""
 from __future__ import annotations
 
-from homeassistant.components.sensor import SensorEntity, SensorEntityDescription, SensorStateClass, SensorDeviceClass
+from homeassistant.components.sensor import SensorEntity, SensorEntityDescription, SensorStateClass
+from homeassistant.helpers.entity import EntityCategory
 from homeassistant.const import (
-    DEVICE_CLASS_BATTERY,
-    PERCENTAGE
+    UnitOfElectricPotential,
+    DEVICE_CLASS_VOLTAGE,
 )
 
 from .const import (
@@ -24,9 +25,9 @@ ENTITY_DESCRIPTIONS = (
         key="battVoltage",
         name=DOMAIN+"_Battery Voltage",
         icon="mdi:battery",
-        #device_class= DEVICE_CLASS_BATTERY,
-        #state_class=SensorStateClass.MEASUREMENT,
-        unit_of_measurement=PERCENTAGE
+        device_class= DEVICE_CLASS_VOLTAGE,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfElectricPotential.VOLT
     ),
     SensorEntityDescription(
         key="mode",
@@ -123,6 +124,12 @@ ENTITY_DESCRIPTIONS = (
         name=DOMAIN+"Firing Intensity",
         icon="mdi:knob",
     ),
+        SensorEntityDescription(
+        key="enabled",
+        name=DOMAIN+"wifi_enabled",
+        icon="mdi:knob",
+        entity_category=EntityCategory.DIAGNOSTIC
+    ),
 
 )
 
@@ -166,6 +173,5 @@ class IntegrationBlueprintSensor(IntegrationBlueprintEntity, SensorEntity):
         """Return the native value of the sensor."""
         # return self.coordinator.data.get("mode")
         print(self.coordinator.data.get(self.entity_description.key))
-        return {
-            self.coordinator.data.get(self.entity_description.key)
-        }
+        return self.coordinator.data.get(self.entity_description.key)
+

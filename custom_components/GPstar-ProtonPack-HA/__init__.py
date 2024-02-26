@@ -28,6 +28,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.data[DOMAIN][entry.entry_id] = coordinator = BlueprintDataUpdateCoordinator(
         hass=hass,
         client=IntegrationBlueprintApiClient(
+            url="http://192.168.50.10/status",
             username=entry.data[CONF_USERNAME],
             password=entry.data[CONF_PASSWORD],
             session=async_get_clientsession(hass),

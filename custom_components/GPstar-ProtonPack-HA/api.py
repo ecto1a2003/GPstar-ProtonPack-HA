@@ -29,6 +29,7 @@ class IntegrationBlueprintApiClient:
 
     def __init__(
         self,
+        url: str,
         username: str,
         password: str,
         session: aiohttp.ClientSession,
@@ -37,6 +38,7 @@ class IntegrationBlueprintApiClient:
         self._username = username
         self._password = password
         self._session = session
+        self.url = url
 
     async def async_get_data(self) -> any:
         """Get data from the API."""
@@ -44,7 +46,8 @@ class IntegrationBlueprintApiClient:
             # method="get", url="https://jsonplaceholder.typicode.com/posts/1"
             method="get",
             #url="https://jsonplaceholder.typicode.com/posts/1",
-            url="http://192.168.50.10/status",
+            #url="http://192.168.50.10/status",
+            url=self.url
             #headers={"Content-type": "application/json; charset=UTF-8"},
         )
 
