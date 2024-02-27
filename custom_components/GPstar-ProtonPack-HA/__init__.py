@@ -11,7 +11,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .api import IntegrationBlueprintApiClient
-from .const import DOMAIN
+from .const import DOMAIN, URIS
 from .coordinator import BlueprintDataUpdateCoordinator
 
 PLATFORMS: list[Platform] = [
@@ -22,10 +22,14 @@ PLATFORMS: list[Platform] = [
 
 
 # https://developers.home-assistant.io/docs/config_entries_index/#setting-up-an-entry
+
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up this integration using UI."""
     hass.data.setdefault(DOMAIN, {})
-    hass.data[DOMAIN][entry.entry_id] = coordinator = BlueprintDataUpdateCoordinator(
+    #for URI in URIS:
+    print(entry.entry_id)
+    print("loopinguri status")
+    coordinator = hass.data[DOMAIN][entry.entry_id+"status"] = BlueprintDataUpdateCoordinator(
         hass=hass,
         client=IntegrationBlueprintApiClient(
             url="http://192.168.50.10/status",
@@ -36,6 +40,30 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     )
     # https://developers.home-assistant.io/docs/integration_fetching_data#coordinated-single-api-poll-for-data-for-all-entities
     await coordinator.async_config_entry_first_refresh()
+    print("loopinguri wifi")
+    coordinator2 = hass.data[DOMAIN][entry.entry_id+"wifi"] = BlueprintDataUpdateCoordinator(
+        hass=hass,
+        client=IntegrationBlueprintApiClient(
+            url="http://192.168.50.10/wifi/settings",
+            username=entry.data[CONF_USERNAME],
+            password=entry.data[CONF_PASSWORD],
+            session=async_get_clientsession(hass),
+        ),
+    )
+        # https://developers.home-assistant.io/docs/integration_fetching_data#coordinated-single-api-poll-for-data-for-all-entities
+    await coordinator2.async_config_entry_first_refresh()
+    print("loopinguri smoke")
+    coordinator3 = hass.data[DOMAIN][entry.entry_id+"smoke"] = BlueprintDataUpdateCoordinator(
+        hass=hass,
+        client=IntegrationBlueprintApiClient(
+            url="http://192.168.50.10/config/smoke",
+            username=entry.data[CONF_USERNAME],
+            password=entry.data[CONF_PASSWORD],
+            session=async_get_clientsession(hass),
+        ),
+    )
+        # https://developers.home-assistant.io/docs/integration_fetching_data#coordinated-single-api-poll-for-data-for-all-entities
+    await coordinator3.async_config_entry_first_refresh()
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     entry.async_on_unload(entry.add_update_listener(async_reload_entry))

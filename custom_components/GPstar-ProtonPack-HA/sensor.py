@@ -124,19 +124,67 @@ ENTITY_DESCRIPTIONS = (
         name=DOMAIN+"Firing Intensity",
         icon="mdi:knob",
     ),
-        SensorEntityDescription(
+)
+
+WIFI_ENTITY_DESCRIPTIONS = (
+    SensorEntityDescription(
         key="enabled",
         name=DOMAIN+"wifi_enabled",
-        icon="mdi:knob",
+        icon="mdi:wifi",
         entity_category=EntityCategory.DIAGNOSTIC
     ),
-
+    SensorEntityDescription(
+        key="network",
+        name=DOMAIN+" nework",
+        icon="mdi:console-network",
+        entity_category=EntityCategory.DIAGNOSTIC
+    ),
+    SensorEntityDescription(
+        key="address",
+        name=DOMAIN+" ip address",
+        icon="mdi:ip-network",
+        entity_category=EntityCategory.DIAGNOSTIC
+    ),
 )
+
+SMOKE_ENTITY_DESCRIPTIONS = (
+    SensorEntityDescription(
+        key="smokeEnabled",
+        name=DOMAIN+" smoke enabled",
+        icon="mdi:smoke",
+        #entity_category=EntityCategory.DIAGNOSTIC
+    ),
+    SensorEntityDescription(
+        key="smokeEnabled",
+        name=DOMAIN+" smoke enabled",
+        icon="mdi:smoke",
+        #entity_category=EntityCategory.DIAGNOSTIC
+    ),
+)
+
+# PACK_ENTITY_DESCRIPTIONS = (
+#     SensorEntityDescription(
+#         key="smokeEnabled",
+#         name=DOMAIN+" smoke enabled",
+#         icon="mdi:smoke",
+#         #entity_category=EntityCategory.DIAGNOSTIC
+#     ),
+# )
+
+# WAND_ENTITY_DESCRIPTIONS = (
+#     SensorEntityDescription(
+#         key="smokeEnabled",
+#         name=DOMAIN+" smoke enabled",
+#         icon="mdi:smoke",
+#         #entity_category=EntityCategory.DIAGNOSTIC
+#     ),
+# )
+
 
 
 async def async_setup_entry(hass, entry, async_add_devices):
-    """Set up the sensor platform."""
-    coordinator = hass.data[DOMAIN][entry.entry_id]
+    """Set up the STATUS sensor platform."""
+    coordinator = hass.data[DOMAIN][entry.entry_id+"status"]
     print(entry)
     print(coordinator)
     print(DOMAIN)
@@ -147,8 +195,70 @@ async def async_setup_entry(hass, entry, async_add_devices):
          )
          for entity_description in ENTITY_DESCRIPTIONS
     )
-    print("data")
+    print("status coordinator data")
     print(coordinator.data)
+
+    """Set up the WIFI sensor platform."""
+    wificoordinator = hass.data[DOMAIN][entry.entry_id+"wifi"]
+    print(entry)
+    print(wificoordinator)
+    print(DOMAIN)
+    async_add_devices(
+         IntegrationBlueprintSensor(
+             coordinator=wificoordinator,
+             entity_description=entity_description,
+         )
+         for entity_description in WIFI_ENTITY_DESCRIPTIONS
+    )
+    print("wifi coordinator data")
+    print(wificoordinator.data)
+
+    """Set up the smoke sensor platform."""
+    smokecoordinator = hass.data[DOMAIN][entry.entry_id+"smoke"]
+    print(entry)
+    print(smokecoordinator)
+    print(DOMAIN)
+    async_add_devices(
+         IntegrationBlueprintSensor(
+             coordinator=smokecoordinator,
+             entity_description=entity_description,
+         )
+         for entity_description in SMOKE_ENTITY_DESCRIPTIONS
+    )
+    print("smoke coordinator data")
+    print(smokecoordinator.data)
+
+    # """Set up the WIFI sensor platform."""
+    # wificoordinator = hass.data[DOMAIN][entry.entry_id+"pack"]
+    # print(entry)
+    # print(wificoordinator)
+    # print(DOMAIN)
+    # async_add_devices(
+    #      IntegrationBlueprintSensor(
+    #          coordinator=wificoordinator,
+    #          entity_description=entity_description,
+    #      )
+    #      for entity_description in WIFI_ENTITY_DESCRIPTIONS
+    # )
+    # print("wifi coordinator data")
+    # print(wificoordinator.data)
+
+    # """Set up the WIFI sensor platform."""
+    # wificoordinator = hass.data[DOMAIN][entry.entry_id+"wand"]
+    # print(entry)
+    # print(wificoordinator)
+    # print(DOMAIN)
+    # async_add_devices(
+    #      IntegrationBlueprintSensor(
+    #          coordinator=wificoordinator,
+    #          entity_description=entity_description,
+    #      )
+    #      for entity_description in WIFI_ENTITY_DESCRIPTIONS
+    # )
+    # print("wifi coordinator data")
+    # print(wificoordinator.data)
+
+
 
 
 class IntegrationBlueprintSensor(IntegrationBlueprintEntity, SensorEntity):
@@ -163,15 +273,17 @@ class IntegrationBlueprintSensor(IntegrationBlueprintEntity, SensorEntity):
         super().__init__(coordinator)
         self.entity_description = entity_description
         self._attr_unique_id = entity_description.name
-        print("entity")
-        print(self.entity_description)
-        print()
+        #print("entity"+self.entity_description)
+        #print()
 
     @property
     #def native_value(self) -> str:
     def native_value(self):
         """Return the native value of the sensor."""
         # return self.coordinator.data.get("mode")
-        print(self.coordinator.data.get(self.entity_description.key))
+        print(self.entity_description.key)
+        print(self.coordinator.data)
+        print(self.coordinator)
+        #print(self.coordinator.data.get(self.entity_description.key))
         return self.coordinator.data.get(self.entity_description.key)
 

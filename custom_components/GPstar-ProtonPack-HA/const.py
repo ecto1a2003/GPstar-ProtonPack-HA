@@ -16,7 +16,7 @@ SENSOR_ATTRS = "attrs"
 SENSOR_CATEGORY = "cat"
 SENSOR_UNIT = "unit"
 
-
+URIS = ["/status","/wifi/settings","/config/pack","/config/wand","/config/smoke"]
 SENSORS = {
     "battVoltage": dict(
         [

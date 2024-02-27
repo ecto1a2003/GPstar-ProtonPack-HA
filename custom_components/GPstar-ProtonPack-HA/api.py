@@ -39,7 +39,7 @@ class IntegrationBlueprintApiClient:
         self._password = password
         self._session = session
         self.url = url
-
+        print("api url " +self.url)
     async def async_get_data(self) -> any:
         """Get data from the API."""
         return await self._api_wrapper(
@@ -50,15 +50,15 @@ class IntegrationBlueprintApiClient:
             url=self.url
             #headers={"Content-type": "application/json; charset=UTF-8"},
         )
-
-    async def async_set_title(self, value: str) -> any:
-        """Get data from the API."""
+    #async def async_set_title(self, value: str) -> any:
+    async def async_set_title(self) -> any:
+        """put data to the API."""
         return await self._api_wrapper(
-            method="get",
+            method="put",
             #url="https://jsonplaceholder.typicode.com/posts/1",
-            url="http://192.168.50.10/status",
-            data={"mode": value},
-            headers={"Content-type": "application/json; charset=UTF-8"},
+            url="http://192.168.50.10/pack/on",
+            #data={"mode": value},
+            #headers={"Content-type": "application/json; charset=UTF-8"},
         )
 
     async def _api_wrapper(
@@ -82,6 +82,7 @@ class IntegrationBlueprintApiClient:
                         "Invalid credentials",
                     )
                 response.raise_for_status()
+                print( await response.json())
                 return await response.json()
 
         except asyncio.TimeoutError as exception:

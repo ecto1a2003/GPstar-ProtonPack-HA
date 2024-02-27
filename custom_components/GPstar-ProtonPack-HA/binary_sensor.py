@@ -29,7 +29,7 @@ ENTITY_DESCRIPTIONS = (
 
 async def async_setup_entry(hass, entry, async_add_devices):
     """Set up the binary_sensor platform."""
-    coordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator = hass.data[DOMAIN][entry.entry_id+"status"]
     async_add_devices(
         IntegrationBlueprintBinarySensor(
             coordinator=coordinator,

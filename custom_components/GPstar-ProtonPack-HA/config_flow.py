@@ -73,7 +73,7 @@ class BlueprintFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     async def _test_credentials(self, username: str, password: str) -> None:
         """Validate credentials."""
         client = IntegrationBlueprintApiClient(
-            url="http://192.168.50.10/status",
+            url="http://192.168.50.10/",
             username=username,
             password=password,
             session=async_create_clientsession(self.hass),
